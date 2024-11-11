@@ -36,6 +36,7 @@ void UDSWeaponComponent::Spawn_Weapon()
 	}
 
 	Current_Weapon->AttachToComponent(character->GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("Weapon_Socket"));
+	Current_Weapon->SetOwner(GetOwner());
 }
 //-------------------------------------------------------------------------------------------------------------
 void UDSWeaponComponent::Fire()

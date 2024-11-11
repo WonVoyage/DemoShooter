@@ -19,5 +19,10 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+	void Make_Shot();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) float Trace_Max_Distance = 1500.0f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) FName Name_MuzzleSocket = "Muzzle_Socket";
 };
 //-------------------------------------------------------------------------------------------------------------
