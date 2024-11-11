@@ -4,6 +4,8 @@
 ### C++ ###
 # Prerequisites
 *.d
+*.uasset
+*.umap
 
 # Compiled Object files
 *.slo
