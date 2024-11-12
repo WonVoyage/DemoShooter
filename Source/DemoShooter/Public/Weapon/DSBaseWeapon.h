@@ -20,15 +20,17 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void Make_Shot();
+	virtual bool Get_Trace_Data(FVector& trace_start, FVector& trace_end) const;
 
-	void Make_Shot();
+	
+	void Make_Hit(FHitResult& hit_result, const FVector& trace_start, const FVector& trace_end);
+	void Make_Damage(const FHitResult& hit_result);
+	bool Get_PlayerViewPoint(FVector& view_location, FRotator& view_rotation) const;
+	APlayerController *Get_PlayerController() const;
+	FVector Get_Muzzle_World_Location() const;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) float Trace_Max_Distance = 1500.0f;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) float Bullet_Spread = 1.5f;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) float Time_Between_Shots = 0.1f;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) FName Name_MuzzleSocket = "Muzzle_Socket";
-
-private:
-	FTimerHandle Timer_Fire;
 };
 //-------------------------------------------------------------------------------------------------------------

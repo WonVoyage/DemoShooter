@@ -17,14 +17,12 @@ ADSBaseWeapon::ADSBaseWeapon()
 //-------------------------------------------------------------------------------------------------------------
 void ADSBaseWeapon::Start_Fire()
 {
-	UE_LOG(LogTemp, Error, TEXT("FIRE!!!!"));
-	//Make_Shot();
-	GetWorldTimerManager().SetTimer(Timer_Fire, this, &ADSBaseWeapon::Make_Shot, Time_Between_Shots, true);
+
 }
 //-------------------------------------------------------------------------------------------------------------
 void ADSBaseWeapon::Stop_Fire()
 {
-	GetWorldTimerManager().ClearTimer(Timer_Fire);
+
 }
 //-------------------------------------------------------------------------------------------------------------
 void ADSBaseWeapon::BeginPlay()
@@ -34,39 +32,78 @@ void ADSBaseWeapon::BeginPlay()
 //-------------------------------------------------------------------------------------------------------------
 void ADSBaseWeapon::Make_Shot()
 {
-	const auto player = Cast<ACharacter>(GetOwner());
-	const auto controller = player->GetController();
-	const FTransform socket_transform = SkeletalMesh_Weapon->GetSocketTransform(Name_MuzzleSocket);
+}
+//-------------------------------------------------------------------------------------------------------------
+bool ADSBaseWeapon::Get_Trace_Data(FVector& trace_start, FVector& trace_end) const
+{
 	FVector view_location;
-	FRotator view_rotation;
-	controller->GetPlayerViewPoint(view_location, view_rotation);
-	const auto half_rad = FMath::DegreesToRadians(Bullet_Spread);
-	const FVector trace_start = view_location;
-	const FVector shoot_direction = FMath::VRandCone(view_rotation.Vector(), half_rad);
-	const FVector trace_end = trace_start + shoot_direction * Trace_Max_Distance;
+	FRotator view_rotaion;
+	const FVector shoot_direction = view_rotaion.Vector();
+
+	if (!Get_PlayerViewPoint(view_location, view_rotaion))
+	{
+		return false;
+	}
+
+	trace_start = view_location;
+	trace_end = trace_start + shoot_direction * Trace_Max_Distance;
+
+	return true;
+}
+//-------------------------------------------------------------------------------------------------------------
+void ADSBaseWeapon::Make_Hit(FHitResult& hit_result, const FVector& trace_start, const FVector& trace_end)
+{
+	if (!GetWorld())
+	{
+		return;
+	}
+
 	FCollisionQueryParams collision_params;
 	collision_params.AddIgnoredActor(GetOwner());
-	FHitResult hit_result;
 
 	GetWorld()->LineTraceSingleByChannel(hit_result, trace_start, trace_end, ECollisionChannel::ECC_Visibility, collision_params);
+}
+//-------------------------------------------------------------------------------------------------------------
+void ADSBaseWeapon::Make_Damage(const FHitResult& hit_result)
+{
+	const auto damage_actor = hit_result.GetActor();
 
-	if (hit_result.bBlockingHit)
+	if (!damage_actor)
 	{
-		DrawDebugLine(GetWorld(), socket_transform.GetLocation(), hit_result.ImpactPoint, FColor::Red, false, 3.0f, 0, 3.0f);
-		DrawDebugSphere(GetWorld(), hit_result.ImpactPoint, 10.0f, 24, FColor::Red, false, 5.0f);
-
-		ACharacter *hit_player = Cast<ACharacter>(hit_result.GetActor());
-
-		if (!hit_player)
-		{
-			return;
-		}
-
-		hit_player->TakeDamage(10.0f, FDamageEvent(), UGameplayStatics::GetPlayerController(this, 0), this);
+		return;
 	}
-	else
+
+	damage_actor->TakeDamage(10.0f, FDamageEvent(), UGameplayStatics::GetPlayerController(this, 0), this);
+}
+//-------------------------------------------------------------------------------------------------------------
+bool ADSBaseWeapon::Get_PlayerViewPoint(FVector& view_location, FRotator& view_rotation) const
+{
+	const auto controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+	if (!controller)
 	{
-		DrawDebugLine(GetWorld(), socket_transform.GetLocation(), trace_end, FColor::Red, false, 3.0f, 0, 3.0f);
+		return false;
 	}
+
+	controller->GetPlayerViewPoint(view_location, view_rotation);
+
+	return true;
+}
+//-------------------------------------------------------------------------------------------------------------
+APlayerController *ADSBaseWeapon::Get_PlayerController() const
+{
+	const auto player = Cast<ACharacter>(GetOwner());
+
+	if (!player)
+	{
+		return nullptr;
+	}
+	
+	return player->GetController<APlayerController>();
+}
+//-------------------------------------------------------------------------------------------------------------
+FVector ADSBaseWeapon::Get_Muzzle_World_Location() const
+{
+	return SkeletalMesh_Weapon->GetSocketLocation(Name_MuzzleSocket);
 }
 //-------------------------------------------------------------------------------------------------------------
