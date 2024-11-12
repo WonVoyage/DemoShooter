@@ -54,7 +54,8 @@ void ADSCharacter::SetupPlayerInputComponent(UInputComponent *player_input_compo
 	player_input_component->BindAction(TEXT("Jump"), IE_Pressed, this, &ADSCharacter::Jump);
 	player_input_component->BindAction(TEXT("Run"), IE_Pressed, this, &ADSCharacter::On_Run_Start);
 	player_input_component->BindAction(TEXT("Run"), IE_Released, this, &ADSCharacter::On_Run_End);
-	player_input_component->BindAction(TEXT("Fire"), IE_Pressed, Component_Weapon, &UDSWeaponComponent::Fire);
+	player_input_component->BindAction(TEXT("Fire"), IE_Pressed, Component_Weapon, &UDSWeaponComponent::Start_Fire);
+	player_input_component->BindAction(TEXT("Fire"), IE_Released, Component_Weapon, &UDSWeaponComponent::Stop_Fire);
 }
 //-------------------------------------------------------------------------------------------------------------
 bool ADSCharacter::Is_Running() const

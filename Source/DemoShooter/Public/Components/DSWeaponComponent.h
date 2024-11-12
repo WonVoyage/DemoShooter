@@ -19,7 +19,8 @@ public:
 	
 	ADSBaseWeapon *Current_Weapon = nullptr;
 
-	void Fire();
+	void Start_Fire();
+	void Stop_Fire();
 
 protected:
 	virtual void BeginPlay() override;

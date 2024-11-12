@@ -15,10 +15,16 @@ ADSBaseWeapon::ADSBaseWeapon()
 	SetRootComponent(SkeletalMesh_Weapon);
 }
 //-------------------------------------------------------------------------------------------------------------
-void ADSBaseWeapon::Fire()
+void ADSBaseWeapon::Start_Fire()
 {
 	UE_LOG(LogTemp, Error, TEXT("FIRE!!!!"));
-	Make_Shot();
+	//Make_Shot();
+	GetWorldTimerManager().SetTimer(Timer_Fire, this, &ADSBaseWeapon::Make_Shot, Time_Between_Shots, true);
+}
+//-------------------------------------------------------------------------------------------------------------
+void ADSBaseWeapon::Stop_Fire()
+{
+	GetWorldTimerManager().ClearTimer(Timer_Fire);
 }
 //-------------------------------------------------------------------------------------------------------------
 void ADSBaseWeapon::BeginPlay()
@@ -34,8 +40,9 @@ void ADSBaseWeapon::Make_Shot()
 	FVector view_location;
 	FRotator view_rotation;
 	controller->GetPlayerViewPoint(view_location, view_rotation);
+	const auto half_rad = FMath::DegreesToRadians(Bullet_Spread);
 	const FVector trace_start = view_location;
-	const FVector shoot_direction = view_rotation.Vector();
+	const FVector shoot_direction = FMath::VRandCone(view_rotation.Vector(), half_rad);
 	const FVector trace_end = trace_start + shoot_direction * Trace_Max_Distance;
 	FCollisionQueryParams collision_params;
 	collision_params.AddIgnoredActor(GetOwner());

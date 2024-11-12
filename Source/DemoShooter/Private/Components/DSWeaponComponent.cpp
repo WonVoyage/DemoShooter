@@ -39,13 +39,23 @@ void UDSWeaponComponent::Spawn_Weapon()
 	Current_Weapon->SetOwner(GetOwner());
 }
 //-------------------------------------------------------------------------------------------------------------
-void UDSWeaponComponent::Fire()
+void UDSWeaponComponent::Start_Fire()
 {
 	if (!Weapon_Class)
 	{
 		throw 23;
 	}
 
-	Current_Weapon->Fire();
+	Current_Weapon->Start_Fire();
+}
+//-------------------------------------------------------------------------------------------------------------
+void UDSWeaponComponent::Stop_Fire()
+{
+	if (!Weapon_Class)
+	{
+		throw 23;
+	}
+
+	Current_Weapon->Stop_Fire();
 }
 //-------------------------------------------------------------------------------------------------------------
