@@ -46,7 +46,7 @@ void ADSRifleWeapon::Make_Shot()
 	}
 }
 //-------------------------------------------------------------------------------------------------------------
-bool ADSRifleWeapon::Get_Trace_Data(FVector& trace_start, FVector& trace_end) const
+bool ADSRifleWeapon::Get_Trace_Data(FVector &trace_start, FVector &trace_end) const
 {
 	const auto half_rad = FMath::DegreesToRadians(Bullet_Spread);
 	FVector view_location;

@@ -34,24 +34,25 @@ void ADSBaseWeapon::Make_Shot()
 {
 }
 //-------------------------------------------------------------------------------------------------------------
-bool ADSBaseWeapon::Get_Trace_Data(FVector& trace_start, FVector& trace_end) const
+bool ADSBaseWeapon::Get_Trace_Data(FVector &trace_start, FVector &trace_end) const
 {
 	FVector view_location;
 	FRotator view_rotaion;
-	const FVector shoot_direction = view_rotaion.Vector();
+	FVector shoot_direction;
 
 	if (!Get_PlayerViewPoint(view_location, view_rotaion))
 	{
 		return false;
 	}
 
+	shoot_direction = view_rotaion.Vector();
 	trace_start = view_location;
 	trace_end = trace_start + shoot_direction * Trace_Max_Distance;
 
 	return true;
 }
 //-------------------------------------------------------------------------------------------------------------
-void ADSBaseWeapon::Make_Hit(FHitResult& hit_result, const FVector& trace_start, const FVector& trace_end)
+void ADSBaseWeapon::Make_Hit(FHitResult &hit_result, const FVector &trace_start, const FVector &trace_end)
 {
 	if (!GetWorld())
 	{
@@ -64,7 +65,7 @@ void ADSBaseWeapon::Make_Hit(FHitResult& hit_result, const FVector& trace_start,
 	GetWorld()->LineTraceSingleByChannel(hit_result, trace_start, trace_end, ECollisionChannel::ECC_Visibility, collision_params);
 }
 //-------------------------------------------------------------------------------------------------------------
-void ADSBaseWeapon::Make_Damage(const FHitResult& hit_result)
+void ADSBaseWeapon::Make_Damage(const FHitResult &hit_result)
 {
 	const auto damage_actor = hit_result.GetActor();
 
@@ -76,7 +77,7 @@ void ADSBaseWeapon::Make_Damage(const FHitResult& hit_result)
 	damage_actor->TakeDamage(10.0f, FDamageEvent(), UGameplayStatics::GetPlayerController(this, 0), this);
 }
 //-------------------------------------------------------------------------------------------------------------
-bool ADSBaseWeapon::Get_PlayerViewPoint(FVector& view_location, FRotator& view_rotation) const
+bool ADSBaseWeapon::Get_PlayerViewPoint(FVector &view_location, FRotator &view_rotation) const
 {
 	const auto controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 

@@ -13,7 +13,7 @@ class DEMOSHOOTER_API ADSBaseWeapon : public AActor
 public:	
 	ADSBaseWeapon();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon") USkeletalMeshComponent *SkeletalMesh_Weapon;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon") USkeletalMeshComponent *SkeletalMesh_Weapon;
 
 	virtual void Start_Fire();
 	virtual void Stop_Fire();
@@ -30,7 +30,7 @@ protected:
 	APlayerController *Get_PlayerController() const;
 	FVector Get_Muzzle_World_Location() const;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) float Trace_Max_Distance = 1500.0f;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) FName Name_MuzzleSocket = "Muzzle_Socket";
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) float Trace_Max_Distance = 1500.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) FName Name_MuzzleSocket = "Muzzle_Socket";
 };
 //-------------------------------------------------------------------------------------------------------------

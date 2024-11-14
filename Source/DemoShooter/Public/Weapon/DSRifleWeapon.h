@@ -20,8 +20,8 @@ protected:
 	virtual void Make_Shot() override;
 	virtual bool Get_Trace_Data(FVector& trace_start, FVector& trace_end) const override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) float Bullet_Spread = 1.5f;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) float Time_Between_Shots = 0.1f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) float Bullet_Spread = 1.5f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) float Time_Between_Shots = 0.1f;
 
 private:
 	FTimerHandle Timer_Fire;
