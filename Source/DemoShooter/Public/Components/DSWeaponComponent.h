@@ -45,14 +45,18 @@ private:
 	void Equip_Weapon(int32 weapon_index);
 	void Play_AnimMontage(UAnimMontage *animation);
 	void Init_Animations();
-	void On_Equip_Finished(USkeletalMeshComponent* mesh_component);
+	void On_Equip_Finished(USkeletalMeshComponent *mesh_component);
+	void On_Reload_Finished(USkeletalMeshComponent *mesh_component);
 	bool Can_Fire() const;
 	bool Can_Equip() const;
+	bool Can_Reload() const;
+	template <typename T> T *Find_Notify_By_Class(UAnimSequenceBase *animation);
 
 	UPROPERTY() ADSBaseWeapon *Current_Weapon = nullptr;
 	UPROPERTY() TArray<ADSBaseWeapon*> Weapons;
 
-	bool Equip_Anim_In_Progress = false;
-	int32 Current_Weapon_Index = 0;
+	bool Anim_In_Progress_Equip = false;
+	bool Anim_In_Progress_Reload = false;
+	int32 Index_Current_Weapon = 0;
 };
 //-------------------------------------------------------------------------------------------------------------

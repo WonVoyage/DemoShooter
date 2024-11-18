@@ -1,13 +1,9 @@
-#pragma once
-
-#include "CoreMinimal.h"
 #include "Animations/DSAnimNotify.h"
-#include "DSEquipFinishedAnimNotify.generated.h"
 
 //-------------------------------------------------------------------------------------------------------------
-UCLASS()
-class DEMOSHOOTER_API UDSEquipFinishedAnimNotify : public UDSAnimNotify
+void UDSAnimNotify::Notify(USkeletalMeshComponent* mesh_component, UAnimSequenceBase* animation)
 {
-	GENERATED_BODY()
-};
+	OnNotified.Broadcast(mesh_component);
+	Super::Notify(mesh_component, animation);
+}
 //-------------------------------------------------------------------------------------------------------------

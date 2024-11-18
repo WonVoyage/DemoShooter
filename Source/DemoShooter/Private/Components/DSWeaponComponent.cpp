@@ -2,6 +2,7 @@
 #include "Weapon/DSBaseWeapon.h"
 #include "GameFramework/Character.h"
 #include "Animations/DSEquipFinishedAnimNotify.h"
+#include "Animations/DSReloadFinishedAnimNotify.h"
 
 //-------------------------------------------------------------------------------------------------------------
 UDSWeaponComponent::UDSWeaponComponent()
@@ -11,7 +12,7 @@ UDSWeaponComponent::UDSWeaponComponent()
 //-------------------------------------------------------------------------------------------------------------
 void UDSWeaponComponent::Start_Fire()
 {
-	if (Can_Fire())
+	if (Can_Fire() && !Anim_In_Progress_Reload)
 	{
 		Current_Weapon->Start_Fire();
 	}
@@ -30,13 +31,19 @@ void UDSWeaponComponent::Next_Weapon()
 	}
 
 	Current_Weapon->Stop_Fire();
-	Current_Weapon_Index = (Current_Weapon_Index + 1) % Weapons.Num();
+	Index_Current_Weapon = (Index_Current_Weapon + 1) % Weapons.Num();
 
-	Equip_Weapon(Current_Weapon_Index);
+	Equip_Weapon(Index_Current_Weapon);
 }
 //-------------------------------------------------------------------------------------------------------------
 void UDSWeaponComponent::Reload()
 {
+	if (!Can_Reload())
+	{
+		return;
+	}
+
+	Anim_In_Progress_Reload = true;
 	Play_AnimMontage(AnimMontage_Current_Reload);
 }
 //-------------------------------------------------------------------------------------------------------------
@@ -51,7 +58,7 @@ void UDSWeaponComponent::BeginPlay()
 
 	Init_Animations();
 	Spawn_Weapons();
-	Equip_Weapon(Current_Weapon_Index);
+	Equip_Weapon(Index_Current_Weapon);
 }
 //-------------------------------------------------------------------------------------------------------------
 void UDSWeaponComponent::Spawn_Weapons()
@@ -95,7 +102,7 @@ void UDSWeaponComponent::Equip_Weapon(int32 weapon_index)
 
 	//AnimMontage_Current_Reload = Weapon_Data[weapon_index].AnimMontage_Reload;
 	Current_Weapon = Weapons[weapon_index];
-	Equip_Anim_In_Progress = true;
+	Anim_In_Progress_Equip = true;
 
 	Attach_Weapon_To_Socket(Current_Weapon, character->GetMesh(), Name_Weapon_Equip_Socket);
 	Play_AnimMontage(AnimMontage_Equip);
@@ -119,18 +126,25 @@ void UDSWeaponComponent::Init_Animations()
 		return;
 	}
 
-	const auto notify_events = AnimMontage_Equip->Notifies;
+	auto notify_equip_finished = Find_Notify_By_Class<UDSEquipFinishedAnimNotify>(AnimMontage_Equip);
 
-	for (auto notify_event : notify_events)
+	if (notify_equip_finished)
 	{
-		auto notify_equip_finished = Cast<UDSEquipFinishedAnimNotify>(notify_event.Notify);
-
-		if (notify_equip_finished)
-		{
-			notify_equip_finished->OnNotified.AddUObject(this, &UDSWeaponComponent::On_Equip_Finished);
-			break;
-		}
+		notify_equip_finished->OnNotified.AddUObject(this, &UDSWeaponComponent::On_Equip_Finished);
 	}
+
+	for (auto &weapon_data : Weapon_Data)
+	{
+		auto notify_reload_finished = Find_Notify_By_Class<UDSReloadFinishedAnimNotify>(weapon_data.AnimMontage_Reload);
+
+		if (!notify_equip_finished)
+		{
+			continue;
+		}
+
+		notify_reload_finished->OnNotified.AddUObject(this, &UDSWeaponComponent::On_Reload_Finished);
+	}
+
 }
 //-------------------------------------------------------------------------------------------------------------
 void UDSWeaponComponent::On_Equip_Finished(USkeletalMeshComponent* mesh_component)
@@ -139,18 +153,52 @@ void UDSWeaponComponent::On_Equip_Finished(USkeletalMeshComponent* mesh_componen
 
  	if (character->GetMesh() == mesh_component)
 	{
-		Equip_Anim_In_Progress = false;
+		Anim_In_Progress_Equip = false;
 		UE_LOG(LogTemp, Error, TEXT("Equip Finished"));
+	}
+}
+//-------------------------------------------------------------------------------------------------------------
+void UDSWeaponComponent::On_Reload_Finished(USkeletalMeshComponent* mesh_component)
+{
+	ACharacter* character = Cast<ACharacter>(GetOwner());
+
+	if (character->GetMesh() == mesh_component)
+	{
+		Anim_In_Progress_Reload = false;
+		UE_LOG(LogTemp, Error, TEXT("Reload Finished"));
 	}
 }
 //-------------------------------------------------------------------------------------------------------------
 bool UDSWeaponComponent::Can_Fire() const
 {
-	return !Equip_Anim_In_Progress;
+	return !Anim_In_Progress_Equip && !Anim_In_Progress_Reload;
 }
 //-------------------------------------------------------------------------------------------------------------
 bool UDSWeaponComponent::Can_Equip() const
 {
-	return !Equip_Anim_In_Progress;
+	return !Anim_In_Progress_Equip;
+}
+//-------------------------------------------------------------------------------------------------------------
+bool UDSWeaponComponent::Can_Reload() const
+{
+	return !Anim_In_Progress_Reload;
+}
+//-------------------------------------------------------------------------------------------------------------
+template <typename T>
+T *UDSWeaponComponent::Find_Notify_By_Class(UAnimSequenceBase *animation)
+{
+	const auto notify_events = animation->Notifies;
+
+	for (auto notify_event : notify_events)
+	{
+		auto anim_notify = Cast<T>(notify_event.Notify);
+
+		if (anim_notify)
+		{
+			return anim_notify;
+		}
+	}
+
+	return nullptr;
 }
 //-------------------------------------------------------------------------------------------------------------
