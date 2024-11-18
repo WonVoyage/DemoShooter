@@ -56,6 +56,8 @@ void ADSCharacter::SetupPlayerInputComponent(UInputComponent *player_input_compo
 	player_input_component->BindAction(TEXT("Run"), IE_Released, this, &ADSCharacter::On_Run_End);
 	player_input_component->BindAction(TEXT("Fire"), IE_Pressed, Component_Weapon, &UDSWeaponComponent::Start_Fire);
 	player_input_component->BindAction(TEXT("Fire"), IE_Released, Component_Weapon, &UDSWeaponComponent::Stop_Fire);
+	player_input_component->BindAction(TEXT("Next_Weapon"), IE_Pressed, Component_Weapon, &UDSWeaponComponent::Next_Weapon);
+	player_input_component->BindAction(TEXT("Reload"), IE_Pressed, Component_Weapon, &UDSWeaponComponent::Reload);
 }
 //-------------------------------------------------------------------------------------------------------------
 bool ADSCharacter::Is_Running() const
@@ -65,6 +67,7 @@ bool ADSCharacter::Is_Running() const
 //-------------------------------------------------------------------------------------------------------------
 void ADSCharacter::On_Death()
 {
+	Component_Weapon->Get_Current_Weapon()->Stop_Fire();
 	PlayAnimMontage(AnimMontage_Death);
 	GetMovementComponent()->StopMovementImmediately();
 

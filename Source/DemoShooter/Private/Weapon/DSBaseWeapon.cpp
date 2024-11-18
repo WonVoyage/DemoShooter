@@ -6,6 +6,15 @@
 #include "Engine/DamageEvents.h"
 
 //-------------------------------------------------------------------------------------------------------------
+FAmmoData::FAmmoData(){}
+//-------------------------------------------------------------------------------------------------------------
+FAmmoData::FAmmoData(bool infinite, int32 bullets, int32 clips)
+{
+	Infinite = infinite;
+	Bullets = bullets;
+	Clips = clips;
+}
+//-------------------------------------------------------------------------------------------------------------
 ADSBaseWeapon::ADSBaseWeapon()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -28,6 +37,8 @@ void ADSBaseWeapon::Stop_Fire()
 void ADSBaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Current_Ammo = Default_Ammo;
 }
 //-------------------------------------------------------------------------------------------------------------
 void ADSBaseWeapon::Make_Shot()
@@ -75,6 +86,45 @@ void ADSBaseWeapon::Make_Damage(const FHitResult &hit_result)
 	}
 
 	damage_actor->TakeDamage(10.0f, FDamageEvent(), UGameplayStatics::GetPlayerController(this, 0), this);
+}
+//-------------------------------------------------------------------------------------------------------------
+void ADSBaseWeapon::Decrease_Ammo()
+{
+	Current_Ammo.Bullets--;
+	Log_Ammo();
+
+	if (Is_Clip_Empty() && !Is_Ammo_Empty())
+	{
+		Change_Clip();
+	}
+}
+//-------------------------------------------------------------------------------------------------------------
+void ADSBaseWeapon::Change_Clip()
+{
+	Current_Ammo.Bullets = Default_Ammo.Bullets;
+
+	if (!Current_Ammo.Infinite)
+	{
+		Current_Ammo.Clips--;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("---------------- CHANGE CLIP ----------------"));
+}
+//-------------------------------------------------------------------------------------------------------------
+void ADSBaseWeapon::Log_Ammo()
+{
+	FString ammo_info = "Ammo" + FString::FromInt(Current_Ammo.Bullets) + " / ";
+	ammo_info += Current_Ammo.Infinite ? "Infinite" : FString::FromInt(Current_Ammo.Clips);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *ammo_info);
+}
+//-------------------------------------------------------------------------------------------------------------
+bool ADSBaseWeapon::Is_Ammo_Empty() const
+{
+	return !Current_Ammo.Infinite && Current_Ammo.Clips == 0 && Is_Clip_Empty();
+}
+//-------------------------------------------------------------------------------------------------------------
+bool ADSBaseWeapon::Is_Clip_Empty() const
+{
+	return Current_Ammo.Bullets == 0;
 }
 //-------------------------------------------------------------------------------------------------------------
 bool ADSBaseWeapon::Get_PlayerViewPoint(FVector &view_location, FRotator &view_rotation) const

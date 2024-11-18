@@ -18,7 +18,7 @@ void ADSLauncherWeapon::Stop_Fire()
 //-------------------------------------------------------------------------------------------------------------
 void ADSLauncherWeapon::Make_Shot()
 {
-	if (!GetWorld())
+	if (!GetWorld() || Is_Ammo_Empty())
 	{
 		return;
 	}
@@ -52,5 +52,7 @@ void ADSLauncherWeapon::Make_Shot()
 		projectile->SetOwner(GetOwner());
 		projectile->FinishSpawning(spawn_transform);
 	}
+
+	Decrease_Ammo();
 }
 //-------------------------------------------------------------------------------------------------------------

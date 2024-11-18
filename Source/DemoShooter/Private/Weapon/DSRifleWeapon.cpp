@@ -18,7 +18,7 @@ void ADSRifleWeapon::Stop_Fire()
 //-------------------------------------------------------------------------------------------------------------
 void ADSRifleWeapon::Make_Shot()
 {
-	if (!GetWorld())
+	if (!GetWorld() || Is_Ammo_Empty())
 	{
 		return;
 	}
@@ -44,6 +44,8 @@ void ADSRifleWeapon::Make_Shot()
 	{
 		DrawDebugLine(GetWorld(), Get_Muzzle_World_Location(), trace_end, FColor::Red, false, 3.0f, 0, 3.0f);
 	}
+
+	Decrease_Ammo();
 }
 //-------------------------------------------------------------------------------------------------------------
 bool ADSRifleWeapon::Get_Trace_Data(FVector &trace_start, FVector &trace_end) const
