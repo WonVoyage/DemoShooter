@@ -12,7 +12,7 @@ UDSWeaponComponent::UDSWeaponComponent()
 //-------------------------------------------------------------------------------------------------------------
 void UDSWeaponComponent::Start_Fire()
 {
-	if (Can_Fire() && !Anim_In_Progress_Reload)
+	if (Can_Fire())
 	{
 		Current_Weapon->Start_Fire();
 	}
@@ -38,11 +38,23 @@ void UDSWeaponComponent::Next_Weapon()
 //-------------------------------------------------------------------------------------------------------------
 void UDSWeaponComponent::Reload()
 {
+	Change_Clip();
+}
+//-------------------------------------------------------------------------------------------------------------
+void UDSWeaponComponent::On_Empty_Clip()
+{
+	Change_Clip();
+}
+//-------------------------------------------------------------------------------------------------------------
+void UDSWeaponComponent::Change_Clip()
+{
 	if (!Can_Reload())
 	{
 		return;
 	}
 
+	Current_Weapon->Stop_Fire();
+	Current_Weapon->Change_Clip();
 	Anim_In_Progress_Reload = true;
 	Play_AnimMontage(AnimMontage_Current_Reload);
 }
@@ -76,6 +88,7 @@ void UDSWeaponComponent::Spawn_Weapons()
 
 		weapon->SetOwner(GetOwner());
 		Weapons.Add(weapon);
+		weapon->On_Clip_Empty.AddUObject(this, &UDSWeaponComponent::On_Empty_Clip);
 		Attach_Weapon_To_Socket(weapon, character->GetMesh(), Name_Weapon_Armory_Socket);
 	}
 }
@@ -181,7 +194,7 @@ bool UDSWeaponComponent::Can_Equip() const
 //-------------------------------------------------------------------------------------------------------------
 bool UDSWeaponComponent::Can_Reload() const
 {
-	return !Anim_In_Progress_Reload;
+	return !Anim_In_Progress_Reload && !Anim_In_Progress_Equip && Current_Weapon->Can_Reload();
 }
 //-------------------------------------------------------------------------------------------------------------
 template <typename T>

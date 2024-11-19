@@ -16,6 +16,11 @@ bool UDSHealthComponent::Is_Dead() const
 	return Health <= 0.0f;
 }
 //-------------------------------------------------------------------------------------------------------------
+float UDSHealthComponent::Get_Health_Percent() const
+{
+	return Health / Max_Health;
+}
+//-------------------------------------------------------------------------------------------------------------
 void UDSHealthComponent::OnTakeAnyDamage(AActor *damage_actor, float damage, const class UDamageType *damage_type, class AController *instigated_by, AActor *damage_causer)
 {
 	if (damage <= 0.0f || Is_Dead())

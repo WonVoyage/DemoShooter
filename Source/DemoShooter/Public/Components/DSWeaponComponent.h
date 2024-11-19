@@ -28,6 +28,8 @@ public:
 	void Stop_Fire();
 	void Next_Weapon();
 	void Reload();
+	void On_Empty_Clip();
+	void Change_Clip();
 	ADSBaseWeapon *Get_Current_Weapon();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon") FName Name_Weapon_Equip_Socket = "Weapon_Socket";

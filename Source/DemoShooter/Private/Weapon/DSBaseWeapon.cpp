@@ -34,6 +34,22 @@ void ADSBaseWeapon::Stop_Fire()
 
 }
 //-------------------------------------------------------------------------------------------------------------
+void ADSBaseWeapon::Change_Clip()
+{
+	Current_Ammo.Bullets = Default_Ammo.Bullets;
+
+	if (!Current_Ammo.Infinite)
+	{
+		Current_Ammo.Clips--;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("---------------- CHANGE CLIP ----------------"));
+}
+//-------------------------------------------------------------------------------------------------------------
+bool ADSBaseWeapon::Can_Reload() const
+{
+	return Current_Ammo.Bullets < Default_Ammo.Bullets && Current_Ammo.Clips > 0;
+}
+//-------------------------------------------------------------------------------------------------------------
 void ADSBaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
@@ -43,6 +59,7 @@ void ADSBaseWeapon::BeginPlay()
 //-------------------------------------------------------------------------------------------------------------
 void ADSBaseWeapon::Make_Shot()
 {
+
 }
 //-------------------------------------------------------------------------------------------------------------
 bool ADSBaseWeapon::Get_Trace_Data(FVector &trace_start, FVector &trace_end) const
@@ -95,19 +112,9 @@ void ADSBaseWeapon::Decrease_Ammo()
 
 	if (Is_Clip_Empty() && !Is_Ammo_Empty())
 	{
-		Change_Clip();
+		Stop_Fire();
+		On_Clip_Empty.Broadcast();
 	}
-}
-//-------------------------------------------------------------------------------------------------------------
-void ADSBaseWeapon::Change_Clip()
-{
-	Current_Ammo.Bullets = Default_Ammo.Bullets;
-
-	if (!Current_Ammo.Infinite)
-	{
-		Current_Ammo.Clips--;
-	}
-	UE_LOG(LogTemp, Warning, TEXT("---------------- CHANGE CLIP ----------------"));
 }
 //-------------------------------------------------------------------------------------------------------------
 void ADSBaseWeapon::Log_Ammo()

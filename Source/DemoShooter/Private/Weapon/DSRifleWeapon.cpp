@@ -7,8 +7,8 @@ ADSRifleWeapon::ADSRifleWeapon()
 void ADSRifleWeapon::Start_Fire()
 {
 	UE_LOG(LogTemp, Error, TEXT("FIRE!!!!"));
-	Make_Shot();
 	GetWorldTimerManager().SetTimer(Timer_Fire, this, &ADSRifleWeapon::Make_Shot, Time_Between_Shots, true);
+	Make_Shot();
 }
 //-------------------------------------------------------------------------------------------------------------
 void ADSRifleWeapon::Stop_Fire()
