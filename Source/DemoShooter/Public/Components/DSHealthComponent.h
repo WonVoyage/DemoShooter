@@ -2,9 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "DSCoreTypes.h"
 #include "DSHealthComponent.generated.h"
-
-DECLARE_MULTICAST_DELEGATE(FOnDeath);
 
 //-------------------------------------------------------------------------------------------------------------
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )

@@ -7,7 +7,7 @@ void ADSGameHUD::DrawHUD()
 {
 	Super::DrawHUD();
 
-	Draw_CrossHair();
+	//Draw_CrossHair();
 }
 //-------------------------------------------------------------------------------------------------------------
 void ADSGameHUD::BeginPlay()

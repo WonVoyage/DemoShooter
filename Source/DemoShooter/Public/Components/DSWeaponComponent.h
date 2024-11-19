@@ -2,19 +2,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "DSCoreTypes.h"
 #include "DSWeaponComponent.generated.h"
 
 class ADSBaseWeapon;
 
-//-------------------------------------------------------------------------------------------------------------
-USTRUCT(BlueprintType)
-struct FWeaponData
-{
-	GENERATED_USTRUCT_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon") TSubclassOf<ADSBaseWeapon> Weapon_Class;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animation") UAnimMontage *AnimMontage_Reload;
-};
 //-------------------------------------------------------------------------------------------------------------
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class DEMOSHOOTER_API UDSWeaponComponent : public UActorComponent
@@ -30,6 +22,8 @@ public:
 	void Reload();
 	void On_Empty_Clip();
 	void Change_Clip();
+	bool Get_Weapon_UI_Data(FWeaponUIData &data) const;
+	bool Get_Weapon_Ammo_Data(FAmmoData &data) const;
 	ADSBaseWeapon *Get_Current_Weapon();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon") FName Name_Weapon_Equip_Socket = "Weapon_Socket";
@@ -52,7 +46,6 @@ private:
 	bool Can_Fire() const;
 	bool Can_Equip() const;
 	bool Can_Reload() const;
-	template <typename T> T *Find_Notify_By_Class(UAnimSequenceBase *animation);
 
 	UPROPERTY() ADSBaseWeapon *Current_Weapon = nullptr;
 	UPROPERTY() TArray<ADSBaseWeapon*> Weapons;

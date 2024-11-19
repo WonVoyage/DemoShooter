@@ -3,6 +3,7 @@
 #include "GameFramework/Character.h"
 #include "Animations/DSEquipFinishedAnimNotify.h"
 #include "Animations/DSReloadFinishedAnimNotify.h"
+#include "Animations/AnimUtils.h"
 
 //-------------------------------------------------------------------------------------------------------------
 UDSWeaponComponent::UDSWeaponComponent()
@@ -57,6 +58,28 @@ void UDSWeaponComponent::Change_Clip()
 	Current_Weapon->Change_Clip();
 	Anim_In_Progress_Reload = true;
 	Play_AnimMontage(AnimMontage_Current_Reload);
+}
+//-------------------------------------------------------------------------------------------------------------
+bool UDSWeaponComponent::Get_Weapon_UI_Data(FWeaponUIData &data) const
+{
+	if (Current_Weapon)
+	{
+		data = Current_Weapon->Get_UI_Data();
+		return true;
+	}
+
+	return false;
+}
+//-------------------------------------------------------------------------------------------------------------
+bool UDSWeaponComponent::Get_Weapon_Ammo_Data(FAmmoData &data) const
+{
+	if (Current_Weapon)
+	{
+		data = Current_Weapon->Get_Ammo_Data();
+		return true;
+	}
+
+	return false;
 }
 //-------------------------------------------------------------------------------------------------------------
 ADSBaseWeapon* UDSWeaponComponent::Get_Current_Weapon()
@@ -139,7 +162,7 @@ void UDSWeaponComponent::Init_Animations()
 		return;
 	}
 
-	auto notify_equip_finished = Find_Notify_By_Class<UDSEquipFinishedAnimNotify>(AnimMontage_Equip);
+	auto notify_equip_finished = AnimUtils::Find_Notify_By_Class<UDSEquipFinishedAnimNotify>(AnimMontage_Equip);
 
 	if (notify_equip_finished)
 	{
@@ -148,7 +171,7 @@ void UDSWeaponComponent::Init_Animations()
 
 	for (auto &weapon_data : Weapon_Data)
 	{
-		auto notify_reload_finished = Find_Notify_By_Class<UDSReloadFinishedAnimNotify>(weapon_data.AnimMontage_Reload);
+		auto notify_reload_finished = AnimUtils::Find_Notify_By_Class<UDSReloadFinishedAnimNotify>(weapon_data.AnimMontage_Reload);
 
 		if (!notify_equip_finished)
 		{
@@ -195,23 +218,5 @@ bool UDSWeaponComponent::Can_Equip() const
 bool UDSWeaponComponent::Can_Reload() const
 {
 	return !Anim_In_Progress_Reload && !Anim_In_Progress_Equip && Current_Weapon->Can_Reload();
-}
-//-------------------------------------------------------------------------------------------------------------
-template <typename T>
-T *UDSWeaponComponent::Find_Notify_By_Class(UAnimSequenceBase *animation)
-{
-	const auto notify_events = animation->Notifies;
-
-	for (auto notify_event : notify_events)
-	{
-		auto anim_notify = Cast<T>(notify_event.Notify);
-
-		if (anim_notify)
-		{
-			return anim_notify;
-		}
-	}
-
-	return nullptr;
 }
 //-------------------------------------------------------------------------------------------------------------

@@ -2,22 +2,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "DSCoreTypes.h"
 #include "DSBaseWeapon.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnClipEmptySignature);
-
-//-------------------------------------------------------------------------------------------------------------
-USTRUCT(BlueprintType)
-struct FAmmoData
-{
-	GENERATED_USTRUCT_BODY()
-	FAmmoData();
-	FAmmoData(bool infinite, int32 bullets, int32 clips);
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon") bool Infinite;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon") int32 Bullets;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (EditCondition = "!Infinite")) int32 Clips;
-};
 //-------------------------------------------------------------------------------------------------------------
 UCLASS()
 class DEMOSHOOTER_API ADSBaseWeapon : public AActor
@@ -31,6 +18,8 @@ public:
 
 	void Change_Clip();
 	bool Can_Reload() const;
+	FWeaponUIData Get_UI_Data() const;
+	FAmmoData Get_Ammo_Data() const;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon") USkeletalMeshComponent* SkeletalMesh_Weapon;
 
@@ -53,6 +42,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) float Trace_Max_Distance = 1500.0f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) FName Name_MuzzleSocket = "Muzzle_Socket";
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) FAmmoData Default_Ammo { false, 15, 10 };
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) FWeaponUIData UI_Data;
 
 private:
 	FAmmoData Current_Ammo;

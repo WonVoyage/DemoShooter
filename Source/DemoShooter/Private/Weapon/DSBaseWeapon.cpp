@@ -50,6 +50,16 @@ bool ADSBaseWeapon::Can_Reload() const
 	return Current_Ammo.Bullets < Default_Ammo.Bullets && Current_Ammo.Clips > 0;
 }
 //-------------------------------------------------------------------------------------------------------------
+FWeaponUIData ADSBaseWeapon::Get_UI_Data() const
+{
+	return UI_Data;
+}
+//-------------------------------------------------------------------------------------------------------------
+FAmmoData ADSBaseWeapon::Get_Ammo_Data() const
+{
+	return Current_Ammo;
+}
+//-------------------------------------------------------------------------------------------------------------
 void ADSBaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
