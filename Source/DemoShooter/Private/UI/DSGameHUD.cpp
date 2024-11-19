@@ -1,5 +1,6 @@
 #include "UI/DSGameHUD.h"
 #include "Engine/Canvas.h"
+#include "Blueprint/UserWidget.h"
 
 //-------------------------------------------------------------------------------------------------------------
 void ADSGameHUD::DrawHUD()
@@ -7,6 +8,16 @@ void ADSGameHUD::DrawHUD()
 	Super::DrawHUD();
 
 	Draw_CrossHair();
+}
+//-------------------------------------------------------------------------------------------------------------
+void ADSGameHUD::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (auto player_hud_widget = CreateWidget<UUserWidget>(GetWorld(), Player_HUD_Widget_Class))
+	{
+		player_hud_widget->AddToViewport();
+	}
 }
 //-------------------------------------------------------------------------------------------------------------
 void ADSGameHUD::Draw_CrossHair()
