@@ -9,5 +9,8 @@ UCLASS()
 class DEMOSHOOTER_API ADSHealthPickup : public ADSBasePickup
 {
 	GENERATED_BODY()
+
+private:
+	virtual bool Give_Pickup_To(APawn* pawn) override;
 };
 //-------------------------------------------------------------------------------------------------------------

@@ -8,6 +8,9 @@
 UCLASS()
 class DEMOSHOOTER_API ADSAmmoPickup : public ADSBasePickup
 {
-	GENERATED_BODY()	
+	GENERATED_BODY()
+
+private:
+	virtual bool Give_Pickup_To(APawn* pawn) override;
 };
 //-------------------------------------------------------------------------------------------------------------

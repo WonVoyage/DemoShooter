@@ -20,6 +20,13 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 	virtual void NotifyActorBeginOverlap(AActor *other_actor) override;
 
-	UPROPERTY(VisibleAnywhere, Category = "Pickup")USphereComponent *Component_Collision;
+	UPROPERTY(VisibleAnywhere, Category = "Pickup") float Time_Respawn = 5.0f;
+	UPROPERTY(VisibleAnywhere, Category = "Pickup") USphereComponent *Component_Collision;
+
+private:
+	virtual bool Give_Pickup_To(APawn *pawn);
+
+	void Pickup_Was_Taken();
+	void Respawn();
 };
 //-------------------------------------------------------------------------------------------------------------
