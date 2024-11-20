@@ -32,7 +32,6 @@ protected:
 	void Make_Hit(FHitResult& hit_result, const FVector& trace_start, const FVector& trace_end);
 	void Make_Damage(const FHitResult& hit_result);
 	void Decrease_Ammo();
-	void Log_Ammo();
 	bool Is_Ammo_Empty() const;
 	bool Is_Clip_Empty() const;
 	bool Get_PlayerViewPoint(FVector& view_location, FRotator& view_rotation) const;

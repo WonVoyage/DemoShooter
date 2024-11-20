@@ -118,20 +118,12 @@ void ADSBaseWeapon::Make_Damage(const FHitResult &hit_result)
 void ADSBaseWeapon::Decrease_Ammo()
 {
 	Current_Ammo.Bullets--;
-	Log_Ammo();
 
 	if (Is_Clip_Empty() && !Is_Ammo_Empty())
 	{
 		Stop_Fire();
 		On_Clip_Empty.Broadcast();
 	}
-}
-//-------------------------------------------------------------------------------------------------------------
-void ADSBaseWeapon::Log_Ammo()
-{
-	FString ammo_info = "Ammo" + FString::FromInt(Current_Ammo.Bullets) + " / ";
-	ammo_info += Current_Ammo.Infinite ? "Infinite" : FString::FromInt(Current_Ammo.Clips);
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *ammo_info);
 }
 //-------------------------------------------------------------------------------------------------------------
 bool ADSBaseWeapon::Is_Ammo_Empty() const

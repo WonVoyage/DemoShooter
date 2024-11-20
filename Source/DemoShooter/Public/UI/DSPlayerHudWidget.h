@@ -5,8 +5,6 @@
 #include "DSCoreTypes.h"
 #include "DSPlayerHudWidget.generated.h"
 
-class UDSWeaponComponent;
-
 //-------------------------------------------------------------------------------------------------------------
 UCLASS()
 class DEMOSHOOTER_API UDSPlayerHudWidget : public UUserWidget
@@ -17,8 +15,5 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UI") float Get_Health_Percent() const;
 	UFUNCTION(BlueprintCallable, Category = "UI") bool Get_Weapon_UI_Data(FWeaponUIData &data) const;
 	UFUNCTION(BlueprintCallable, Category = "UI") bool Get_Weapon_Ammo_Data(FAmmoData &data) const;
-
-private:
-	UDSWeaponComponent *Get_Weapon_Component() const;
 };
 //-------------------------------------------------------------------------------------------------------------
