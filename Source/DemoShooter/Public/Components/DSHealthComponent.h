@@ -14,6 +14,9 @@ class DEMOSHOOTER_API UDSHealthComponent : public UActorComponent
 public:	
 	UDSHealthComponent();
 
+	void Set_Health(float health);
+	bool Try_To_Add_Health(int32 amount_health);
+	bool Is_Health_Full() const;
 	float Get_Health() const;
 
 	UFUNCTION(BlueprintCallable) bool Is_Dead() const;

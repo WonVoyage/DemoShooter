@@ -6,6 +6,28 @@ UDSHealthComponent::UDSHealthComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 //-------------------------------------------------------------------------------------------------------------
+void UDSHealthComponent::Set_Health(float health)
+{
+	Health = FMath::Clamp(health, 0.0f, Max_Health);
+}
+//-------------------------------------------------------------------------------------------------------------
+bool UDSHealthComponent::Try_To_Add_Health(int32 amount_health)
+{
+	if (Is_Dead() || Is_Health_Full)
+	{
+		return false;
+	}
+
+	Set_Health(Health + amount_health);
+
+	return true;
+}
+//-------------------------------------------------------------------------------------------------------------
+bool UDSHealthComponent::Is_Health_Full() const
+{
+	return FMath::IsNearlyEqual(Health, Max_Health);
+}
+//-------------------------------------------------------------------------------------------------------------
 float UDSHealthComponent::Get_Health() const
 {
 	return Health;
