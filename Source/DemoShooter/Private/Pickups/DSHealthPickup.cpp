@@ -1,7 +1,7 @@
 #include "Pickups/DSHealthPickup.h"
 
 //-------------------------------------------------------------------------------------------------------------
-bool ADSBasePickup::Give_Pickup_To(APawn* pawn)
+bool ADSHealthPickup::Give_Pickup_To(APawn* pawn)
 {
 	return true;
 }

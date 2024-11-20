@@ -10,7 +10,7 @@ class DEMOSHOOTER_API ADSHealthPickup : public ADSBasePickup
 {
 	GENERATED_BODY()
 
-private:
+protected:
 	virtual bool Give_Pickup_To(APawn* pawn) override;
 };
 //-------------------------------------------------------------------------------------------------------------

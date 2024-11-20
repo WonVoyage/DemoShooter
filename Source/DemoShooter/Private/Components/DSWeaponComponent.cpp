@@ -82,6 +82,19 @@ bool UDSWeaponComponent::Get_Weapon_Ammo_Data(FAmmoData &data) const
 	return false;
 }
 //-------------------------------------------------------------------------------------------------------------
+bool UDSWeaponComponent::Try_To_Add_Ammo(TSubclassOf<ADSBaseWeapon> type_weapon, int32 amount_clips)
+{
+	for (const auto weapon : Weapons)
+	{
+		if (weapon && weapon->IsA(type_weapon))
+		{
+			return weapon->Try_To_Add_Ammo(amount_clips);
+		}
+	}
+	
+	return false;
+}
+//-------------------------------------------------------------------------------------------------------------
 ADSBaseWeapon* UDSWeaponComponent::Get_Current_Weapon()
 {
 	return Current_Weapon;

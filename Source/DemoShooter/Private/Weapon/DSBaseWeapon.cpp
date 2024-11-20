@@ -50,6 +50,39 @@ bool ADSBaseWeapon::Can_Reload() const
 	return Current_Ammo.Bullets < Default_Ammo.Bullets && Current_Ammo.Clips > 0;
 }
 //-------------------------------------------------------------------------------------------------------------
+bool ADSBaseWeapon::Try_To_Add_Ammo(int32 amount_clips)
+{
+	if (Current_Ammo.Infinite || Is_Ammo_Full() || amount_clips <= 0)
+	{
+		return false;
+	}
+
+	if (Is_Ammo_Empty())
+	{
+		Current_Ammo.Clips = FMath::Clamp(Current_Ammo.Clips + amount_clips, 0, Default_Ammo.Clips + 1);
+		On_Clip_Empty.Broadcast();
+	}
+	else if (Current_Ammo.Clips < Default_Ammo.Clips)
+	{
+		const auto amount_next_clips = Current_Ammo.Clips + amount_clips;
+		if (Default_Ammo.Clips - amount_next_clips >= 0)
+		{
+			Current_Ammo.Clips = amount_next_clips;
+		}
+		else
+		{
+			Current_Ammo.Clips = Default_Ammo.Clips;
+			Current_Ammo.Bullets = Default_Ammo.Bullets;
+		}
+	}
+	else
+	{
+		Current_Ammo.Bullets = Default_Ammo.Bullets;
+	}
+
+	return true;
+}
+//-------------------------------------------------------------------------------------------------------------
 FWeaponUIData ADSBaseWeapon::Get_UI_Data() const
 {
 	return UI_Data;
@@ -134,6 +167,11 @@ bool ADSBaseWeapon::Is_Ammo_Empty() const
 bool ADSBaseWeapon::Is_Clip_Empty() const
 {
 	return Current_Ammo.Bullets == 0;
+}
+//-------------------------------------------------------------------------------------------------------------
+bool ADSBaseWeapon::Is_Ammo_Full() const
+{
+	return Current_Ammo.Clips == Default_Ammo.Clips && Current_Ammo.Bullets == Default_Ammo.Bullets;
 }
 //-------------------------------------------------------------------------------------------------------------
 bool ADSBaseWeapon::Get_PlayerViewPoint(FVector &view_location, FRotator &view_rotation) const

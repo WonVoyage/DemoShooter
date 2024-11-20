@@ -29,9 +29,10 @@ void ADSBasePickup::NotifyActorBeginOverlap(AActor *other_actor)
 	Super::NotifyActorBeginOverlap(other_actor);
 
 	const auto pawn = Cast<APawn>(other_actor);
-
-	UE_LOG(LogTemp, Display, TEXT("Pickup was taken"));
-	Pickup_Was_Taken();
+	if (Give_Pickup_To(pawn))
+	{
+		Pickup_Was_Taken();
+	}
 }
 //-------------------------------------------------------------------------------------------------------------
 bool ADSBasePickup::Give_Pickup_To(APawn *pawn)

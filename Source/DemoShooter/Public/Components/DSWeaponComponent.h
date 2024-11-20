@@ -24,6 +24,7 @@ public:
 	void Change_Clip();
 	bool Get_Weapon_UI_Data(FWeaponUIData &data) const;
 	bool Get_Weapon_Ammo_Data(FAmmoData &data) const;
+	bool Try_To_Add_Ammo(TSubclassOf<ADSBaseWeapon> type_weapon, int32 amount_clips);
 	ADSBaseWeapon *Get_Current_Weapon();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon") FName Name_Weapon_Equip_Socket = "Weapon_Socket";
