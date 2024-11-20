@@ -17,11 +17,15 @@ ADSBasePickup::ADSBasePickup()
 void ADSBasePickup::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Generate_Rotation_Yaw();
 }
 //-------------------------------------------------------------------------------------------------------------
 void ADSBasePickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	AddActorLocalRotation(FRotator(0.0f, Rotation_Yaw, 0.0f));
 }
 //-------------------------------------------------------------------------------------------------------------
 void ADSBasePickup::NotifyActorBeginOverlap(AActor *other_actor)
@@ -51,7 +55,16 @@ void ADSBasePickup::Pickup_Was_Taken()
 //-------------------------------------------------------------------------------------------------------------
 void ADSBasePickup::Respawn()
 {
+	Generate_Rotation_Yaw();
+
 	Component_Collision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	GetRootComponent()->SetVisibility(true, true);
+}
+//-------------------------------------------------------------------------------------------------------------
+void ADSBasePickup::Generate_Rotation_Yaw()
+{
+	const auto direction = FMath::RandBool() ? 1.0f : -1.0f;
+
+	Rotation_Yaw = FMath::RandRange(1.0f, 2.0f) * direction;
 }
 //-------------------------------------------------------------------------------------------------------------

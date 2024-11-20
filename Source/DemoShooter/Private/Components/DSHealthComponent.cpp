@@ -13,7 +13,7 @@ void UDSHealthComponent::Set_Health(float health)
 //-------------------------------------------------------------------------------------------------------------
 bool UDSHealthComponent::Try_To_Add_Health(int32 amount_health)
 {
-	if (Is_Dead() || Is_Health_Full)
+	if (Is_Dead() || Is_Health_Full())
 	{
 		return false;
 	}

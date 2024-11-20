@@ -27,5 +27,8 @@ protected:
 private:
 	void Pickup_Was_Taken();
 	void Respawn();
+	void Generate_Rotation_Yaw();
+
+	float Rotation_Yaw = 0.0f;
 };
 //-------------------------------------------------------------------------------------------------------------
