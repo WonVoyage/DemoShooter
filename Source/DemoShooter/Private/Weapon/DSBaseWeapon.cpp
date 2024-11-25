@@ -132,6 +132,7 @@ void ADSBaseWeapon::Make_Hit(FHitResult &hit_result, const FVector &trace_start,
 
 	FCollisionQueryParams collision_params;
 	collision_params.AddIgnoredActor(GetOwner());
+	collision_params.bReturnPhysicalMaterial = true;
 
 	GetWorld()->LineTraceSingleByChannel(hit_result, trace_start, trace_end, ECollisionChannel::ECC_Visibility, collision_params);
 }

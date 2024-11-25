@@ -17,7 +17,8 @@ public:
 
 	void Play_Impact_FX(const FHitResult &hit);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") UNiagaraSystem* Effect;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") UNiagaraSystem *Default_Effect;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") TMap<UPhysicalMaterial*, UNiagaraSystem*> Map_Effects;
 
 protected:
 	virtual void BeginPlay() override;

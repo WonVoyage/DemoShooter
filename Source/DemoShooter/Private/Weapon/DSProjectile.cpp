@@ -13,6 +13,7 @@ ADSProjectile::ADSProjectile()
 	Component_Collision->SetSphereRadius(3.0f);
 	Component_Collision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	Component_Collision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	Component_Collision->bReturnMaterialOnMove = true;
 	
 	Component_Movement = CreateDefaultSubobject<UProjectileMovementComponent>("Component_Projectile_Movement");
 	Component_Movement->InitialSpeed = 2000.0f;
