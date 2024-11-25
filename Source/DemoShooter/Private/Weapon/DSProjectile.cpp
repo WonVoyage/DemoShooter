@@ -1,4 +1,5 @@
 #include "Weapon/DSProjectile.h"
+#include "Weapon/Components/DSWeaponFXComponents.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -16,6 +17,8 @@ ADSProjectile::ADSProjectile()
 	Component_Movement = CreateDefaultSubobject<UProjectileMovementComponent>("Component_Projectile_Movement");
 	Component_Movement->InitialSpeed = 2000.0f;
 	Component_Movement->ProjectileGravityScale = 0.0f;
+
+	Component_FX = CreateDefaultSubobject<UDSWeaponFXComponents>("Component_FX");
 	
 	SetRootComponent(Component_Collision);
 }
@@ -43,7 +46,8 @@ void ADSProjectile::On_Projectile_Hit(UPrimitiveComponent *hit_component, AActor
 
 	Component_Movement->StopMovementImmediately();
 	UGameplayStatics::ApplyRadialDamage(GetWorld(), Damage_Amount, GetActorLocation(), Damage_Radius, UDamageType::StaticClass(), {}, this, Get_Controller(), Full_Damage);
-	DrawDebugSphere(GetWorld(), GetActorLocation(), Damage_Radius, 24, FColor::Red, false, 5.0f);
+	//DrawDebugSphere(GetWorld(), GetActorLocation(), Damage_Radius, 24, FColor::Red, false, 5.0f);
+	Component_FX->Play_Impact_FX(hit);
 	Destroy();
 }
 //-------------------------------------------------------------------------------------------------------------

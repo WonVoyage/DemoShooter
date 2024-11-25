@@ -6,6 +6,7 @@
 
 class USphereComponent;
 class UProjectileMovementComponent;
+class UDSWeaponFXComponents;
 
 //-------------------------------------------------------------------------------------------------------------
 UCLASS()
@@ -29,6 +30,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon") float Damage_Amount = 50.0f;
 	UPROPERTY(VisibleDefaultsOnly, Category = "Weapon") USphereComponent *Component_Collision;
 	UPROPERTY(VisibleDefaultsOnly, Category = "Weapon") UProjectileMovementComponent *Component_Movement;
+	UPROPERTY(VisibleDefaultsOnly, Category = "VFX") UDSWeaponFXComponents *Component_FX;
 
 private:
 	FVector Shot_Direction;

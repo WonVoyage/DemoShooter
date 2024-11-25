@@ -4,6 +4,8 @@
 #include "Weapon/DSBaseWeapon.h"
 #include "DSRifleWeapon.generated.h"
 
+class UDSWeaponFXComponents;
+
 //-------------------------------------------------------------------------------------------------------------
 UCLASS()
 class DEMOSHOOTER_API ADSRifleWeapon : public ADSBaseWeapon
@@ -22,6 +24,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) float Bullet_Spread = 1.5f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) float Time_Between_Shots = 0.1f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") UDSWeaponFXComponents *Component_FX;
 
 private:
 	FTimerHandle Timer_Fire;

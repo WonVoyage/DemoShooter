@@ -1,7 +1,10 @@
 #include "Weapon/DSRifleWeapon.h"
+#include "Weapon/Components/DSWeaponFXComponents.h"
+
 //-------------------------------------------------------------------------------------------------------------
 ADSRifleWeapon::ADSRifleWeapon()
 {
+	Component_FX = CreateDefaultSubobject<UDSWeaponFXComponents>("FX_Component");
 }
 //-------------------------------------------------------------------------------------------------------------
 void ADSRifleWeapon::Start_Fire()
@@ -36,9 +39,7 @@ void ADSRifleWeapon::Make_Shot()
 	if (hit_result.bBlockingHit)
 	{
 		Make_Damage(hit_result);
-		DrawDebugLine(GetWorld(), Get_Muzzle_World_Location(), hit_result.ImpactPoint, FColor::Red, false, 3.0f, 0, 3.0f);
-		DrawDebugSphere(GetWorld(), hit_result.ImpactPoint, 10.0f, 24, FColor::Red, false, 5.0f);
-
+		Component_FX->Play_Impact_FX(hit_result);
 	}
 	else
 	{
