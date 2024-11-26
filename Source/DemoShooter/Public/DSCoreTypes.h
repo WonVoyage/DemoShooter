@@ -41,5 +41,34 @@ struct FWeaponUIData
 
 
 
+
 // Health
 DECLARE_MULTICAST_DELEGATE(FOnDeath);
+
+
+
+
+// VFX
+
+class UNiagaraSystem;
+//-------------------------------------------------------------------------------------------------------------
+USTRUCT(BlueprintType)
+struct FDecalData
+{
+	GENERATED_USTRUCT_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") float Time_Life = 5.0f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") float Time_Fade_Out = 0.7f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") FVector Size = FVector(10.0f);
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") UMaterialInterface *Material;
+};
+//-------------------------------------------------------------------------------------------------------------
+USTRUCT(BlueprintType)
+struct FImpactData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") UNiagaraSystem *Effect_Niagara;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") FDecalData Data_Decal;
+};
+//-------------------------------------------------------------------------------------------------------------

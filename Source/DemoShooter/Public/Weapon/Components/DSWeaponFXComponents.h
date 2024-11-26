@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include <DSCoreTypes.h>
 #include "DSWeaponFXComponents.generated.h"
 
 class UNiagaraSystem;
@@ -17,10 +18,7 @@ public:
 
 	void Play_Impact_FX(const FHitResult &hit);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") UNiagaraSystem *Default_Effect;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") TMap<UPhysicalMaterial*, UNiagaraSystem*> Map_Effects;
-
-protected:
-	virtual void BeginPlay() override;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") FImpactData Data_Impact;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX") TMap<UPhysicalMaterial*, FImpactData> Map_Data_Impacts;
 };
 //-------------------------------------------------------------------------------------------------------------
