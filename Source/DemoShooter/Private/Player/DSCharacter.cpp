@@ -68,10 +68,13 @@ bool ADSCharacter::Is_Running() const
 void ADSCharacter::On_Death()
 {
 	Component_Weapon->Get_Current_Weapon()->Stop_Fire();
-	PlayAnimMontage(AnimMontage_Death);
+	//PlayAnimMontage(AnimMontage_Death);
 	GetMovementComponent()->StopMovementImmediately();
 
 	SetLifeSpan(5.0f);
+
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetMesh()->SetSimulatePhysics(true);
 }
 //-------------------------------------------------------------------------------------------------------------
 void ADSCharacter::Move_Forward(float amount)
