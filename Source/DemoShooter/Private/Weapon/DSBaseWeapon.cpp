@@ -4,6 +4,8 @@
 #include "DrawDebugHelpers.h"
 #include <Kismet/GameplayStatics.h>
 #include "Engine/DamageEvents.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 
 //-------------------------------------------------------------------------------------------------------------
 FAmmoData::FAmmoData(){}
@@ -204,5 +206,10 @@ APlayerController *ADSBaseWeapon::Get_PlayerController() const
 FVector ADSBaseWeapon::Get_Muzzle_World_Location() const
 {
 	return SkeletalMesh_Weapon->GetSocketLocation(Name_MuzzleSocket);
+}
+//-------------------------------------------------------------------------------------------------------------
+UNiagaraComponent *ADSBaseWeapon::Spawn_Muzzle_FX()
+{
+	return UNiagaraFunctionLibrary::SpawnSystemAttached(FX_Muzzle, SkeletalMesh_Weapon, Name_MuzzleSocket, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
 }
 //-------------------------------------------------------------------------------------------------------------

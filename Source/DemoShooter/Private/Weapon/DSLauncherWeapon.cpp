@@ -46,7 +46,7 @@ void ADSLauncherWeapon::Make_Shot()
 
 	const FTransform spawn_transform(FRotator::ZeroRotator, Get_Muzzle_World_Location());
 	
-	if (ADSProjectile* projectile = GetWorld()->SpawnActorDeferred<ADSProjectile>(Class_Projectile, spawn_transform))
+	if (ADSProjectile *projectile = GetWorld()->SpawnActorDeferred<ADSProjectile>(Class_Projectile, spawn_transform))
 	{
 		projectile->Set_Shot_Direction(direction);
 		projectile->SetOwner(GetOwner());
@@ -54,5 +54,6 @@ void ADSLauncherWeapon::Make_Shot()
 	}
 
 	Decrease_Ammo();
+	Spawn_Muzzle_FX();
 }
 //-------------------------------------------------------------------------------------------------------------

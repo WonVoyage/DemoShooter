@@ -1,5 +1,7 @@
 #include "Weapon/DSRifleWeapon.h"
 #include "Weapon/Components/DSWeaponFXComponents.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 //-------------------------------------------------------------------------------------------------------------
 ADSRifleWeapon::ADSRifleWeapon()
@@ -9,7 +11,7 @@ ADSRifleWeapon::ADSRifleWeapon()
 //-------------------------------------------------------------------------------------------------------------
 void ADSRifleWeapon::Start_Fire()
 {
-	UE_LOG(LogTemp, Error, TEXT("FIRE!!!!"));
+	Init_Muzzle_FX();
 	GetWorldTimerManager().SetTimer(Timer_Fire, this, &ADSRifleWeapon::Make_Shot, Time_Between_Shots, true);
 	Make_Shot();
 }
@@ -17,6 +19,7 @@ void ADSRifleWeapon::Start_Fire()
 void ADSRifleWeapon::Stop_Fire()
 {
 	GetWorldTimerManager().ClearTimer(Timer_Fire);
+	Set_Muzzle_FX_Visibility(false);
 }
 //-------------------------------------------------------------------------------------------------------------
 void ADSRifleWeapon::Make_Shot()
@@ -36,16 +39,15 @@ void ADSRifleWeapon::Make_Shot()
 
 	Make_Hit(hit_result, trace_start, trace_end);
 
+	FVector trace_fx_end = trace_end;
+
 	if (hit_result.bBlockingHit)
 	{
+		trace_fx_end = hit_result.ImpactPoint;
 		Make_Damage(hit_result);
 		Component_FX->Play_Impact_FX(hit_result);
 	}
-	else
-	{
-		DrawDebugLine(GetWorld(), Get_Muzzle_World_Location(), trace_end, FColor::Red, false, 3.0f, 0, 3.0f);
-	}
-
+	Spawn_Trace_FX(Get_Muzzle_World_Location(), trace_fx_end);
 	Decrease_Ammo();
 }
 //-------------------------------------------------------------------------------------------------------------
@@ -66,5 +68,33 @@ bool ADSRifleWeapon::Get_Trace_Data(FVector &trace_start, FVector &trace_end) co
 
 
 	return true;
+}
+//-------------------------------------------------------------------------------------------------------------
+void ADSRifleWeapon::Init_Muzzle_FX()
+{
+	if (!Component_FX_Muzzle)
+	{
+		Component_FX_Muzzle = Spawn_Muzzle_FX();
+	}
+
+	Set_Muzzle_FX_Visibility(true);
+}
+//-------------------------------------------------------------------------------------------------------------
+void ADSRifleWeapon::Set_Muzzle_FX_Visibility(bool visible)
+{
+	if (Component_FX_Muzzle)
+	{
+		Component_FX_Muzzle->SetPaused(!visible);
+		Component_FX_Muzzle->SetVisibility(visible, false);
+	}
+}
+//-------------------------------------------------------------------------------------------------------------
+void ADSRifleWeapon::Spawn_Trace_FX(const FVector& trace_start, const FVector& trace_end)
+{
+	const auto trace_fx_component = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Trace_FX, trace_start);
+	if (trace_fx_component)
+	{
+		trace_fx_component->SetNiagaraVariableVec3(Name_Trace_Target, trace_end);
+	}
 }
 //-------------------------------------------------------------------------------------------------------------

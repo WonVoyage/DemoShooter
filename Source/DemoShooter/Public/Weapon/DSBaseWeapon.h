@@ -5,6 +5,9 @@
 #include "DSCoreTypes.h"
 #include "DSBaseWeapon.generated.h"
 
+class UNiagaraSystem;
+class UNiagaraComponent;
+
 //-------------------------------------------------------------------------------------------------------------
 UCLASS()
 class DEMOSHOOTER_API ADSBaseWeapon : public AActor
@@ -40,11 +43,13 @@ protected:
 	bool Get_PlayerViewPoint(FVector& view_location, FRotator& view_rotation) const;
 	APlayerController* Get_PlayerController() const;
 	FVector Get_Muzzle_World_Location() const;
+	UNiagaraComponent *Spawn_Muzzle_FX();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) float Trace_Max_Distance = 1500.0f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) FName Name_MuzzleSocket = "Muzzle_Socket";
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) FAmmoData Default_Ammo { false, 15, 10 };
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) FWeaponUIData UI_Data;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite) UNiagaraSystem *FX_Muzzle;
 
 private:
 	FAmmoData Current_Ammo;
