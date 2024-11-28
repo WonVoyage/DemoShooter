@@ -179,16 +179,33 @@ bool ADSBaseWeapon::Is_Ammo_Full() const
 //-------------------------------------------------------------------------------------------------------------
 bool ADSBaseWeapon::Get_PlayerViewPoint(FVector &view_location, FRotator &view_rotation) const
 {
-	const auto controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	const auto character = Cast<ACharacter>(GetOwner());
 
-	if (!controller)
+	if (!character)
 	{
 		return false;
 	}
 
-	controller->GetPlayerViewPoint(view_location, view_rotation);
+	if (character->IsPlayerControlled())
+	{
+		const auto controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
-	return true;
+		if (!controller)
+		{
+			return false;
+		}
+
+		controller->GetPlayerViewPoint(view_location, view_rotation);
+
+		return true;
+	}
+	else
+	{
+		view_location = Get_Muzzle_World_Location();
+		view_rotation = SkeletalMesh_Weapon->GetSocketRotation(Name_MuzzleSocket);
+		return true;
+	}
+
 }
 //-------------------------------------------------------------------------------------------------------------
 APlayerController *ADSBaseWeapon::Get_PlayerController() const

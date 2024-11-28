@@ -1,20 +1,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Player/DSCharacter.h"
-#include "DSAICharacter.generated.h"
-
-class UBehaviorTree;
+#include "Perception/AIPerceptionComponent.h"
+#include "DSAIPerceptionComponent.generated.h"
 
 //-------------------------------------------------------------------------------------------------------------
 UCLASS()
-class DEMOSHOOTER_API ADSAICharacter : public ADSCharacter
+class DEMOSHOOTER_API UDSAIPerceptionComponent : public UAIPerceptionComponent
 {
 	GENERATED_BODY()
 	
 public:
-	ADSAICharacter(const FObjectInitializer &obj_init);
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI") UBehaviorTree *Tree;
+	AActor *Get_Closes_Enemy() const;
 };
 //-------------------------------------------------------------------------------------------------------------
