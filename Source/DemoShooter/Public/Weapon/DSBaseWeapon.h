@@ -22,6 +22,8 @@ public:
 	void Change_Clip();
 	bool Can_Reload() const;
 	bool Try_To_Add_Ammo(int32 amount_clips);
+	bool Is_Clip_Empty() const;
+	bool Is_Ammo_Empty() const;
 	FWeaponUIData Get_UI_Data() const;
 	FAmmoData Get_Ammo_Data() const;
 
@@ -37,8 +39,6 @@ protected:
 	void Make_Hit(FHitResult& hit_result, const FVector& trace_start, const FVector& trace_end);
 	void Make_Damage(const FHitResult& hit_result);
 	void Decrease_Ammo();
-	bool Is_Ammo_Empty() const;
-	bool Is_Clip_Empty() const;
 	bool Is_Ammo_Full() const;
 	bool Get_PlayerViewPoint(FVector& view_location, FRotator& view_rotation) const;
 	APlayerController* Get_PlayerController() const;

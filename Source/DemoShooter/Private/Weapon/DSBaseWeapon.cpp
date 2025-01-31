@@ -85,6 +85,16 @@ bool ADSBaseWeapon::Try_To_Add_Ammo(int32 amount_clips)
 	return true;
 }
 //-------------------------------------------------------------------------------------------------------------
+bool ADSBaseWeapon::Is_Clip_Empty() const
+{
+	return Current_Ammo.Bullets == 0;
+}
+//-------------------------------------------------------------------------------------------------------------
+bool ADSBaseWeapon::Is_Ammo_Empty() const
+{
+	return !Current_Ammo.Infinite && Current_Ammo.Clips == 0 && Is_Clip_Empty();
+}
+//-------------------------------------------------------------------------------------------------------------
 FWeaponUIData ADSBaseWeapon::Get_UI_Data() const
 {
 	return UI_Data;
@@ -160,16 +170,6 @@ void ADSBaseWeapon::Decrease_Ammo()
 		Stop_Fire();
 		On_Clip_Empty.Broadcast();
 	}
-}
-//-------------------------------------------------------------------------------------------------------------
-bool ADSBaseWeapon::Is_Ammo_Empty() const
-{
-	return !Current_Ammo.Infinite && Current_Ammo.Clips == 0 && Is_Clip_Empty();
-}
-//-------------------------------------------------------------------------------------------------------------
-bool ADSBaseWeapon::Is_Clip_Empty() const
-{
-	return Current_Ammo.Bullets == 0;
 }
 //-------------------------------------------------------------------------------------------------------------
 bool ADSBaseWeapon::Is_Ammo_Full() const

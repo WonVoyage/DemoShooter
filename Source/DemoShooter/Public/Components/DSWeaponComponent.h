@@ -16,9 +16,10 @@ class DEMOSHOOTER_API UDSWeaponComponent : public UActorComponent
 public:	
 	UDSWeaponComponent();
 
-	void Start_Fire();
+	virtual void Start_Fire();
+	virtual void Next_Weapon();
+
 	void Stop_Fire();
-	void Next_Weapon();
 	void Reload();
 	void On_Empty_Clip();
 	void Change_Clip();
@@ -36,23 +37,25 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-private:
-	void Spawn_Weapons();
-	void Attach_Weapon_To_Socket(ADSBaseWeapon *weapon, USceneComponent *scene_component, FName socket_name);
 	void Equip_Weapon(int32 weapon_index);
-	void Play_AnimMontage(UAnimMontage *animation);
-	void Init_Animations();
-	void On_Equip_Finished(USkeletalMeshComponent *mesh_component);
-	void On_Reload_Finished(USkeletalMeshComponent *mesh_component);
 	bool Can_Fire() const;
 	bool Can_Equip() const;
-	bool Can_Reload() const;
 
 	UPROPERTY() ADSBaseWeapon *Current_Weapon = nullptr;
 	UPROPERTY() TArray<ADSBaseWeapon*> Weapons;
 
+	int32 Index_Current_Weapon = 0;
+
+private:
+	void Spawn_Weapons();
+	void Attach_Weapon_To_Socket(ADSBaseWeapon *weapon, USceneComponent *scene_component, FName socket_name);
+	void Play_AnimMontage(UAnimMontage *animation);
+	void Init_Animations();
+	void On_Equip_Finished(USkeletalMeshComponent *mesh_component);
+	void On_Reload_Finished(USkeletalMeshComponent *mesh_component);
+	bool Can_Reload() const;
+
 	bool Anim_In_Progress_Equip = false;
 	bool Anim_In_Progress_Reload = false;
-	int32 Index_Current_Weapon = 0;
 };
 //-------------------------------------------------------------------------------------------------------------
