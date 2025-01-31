@@ -25,7 +25,7 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, Category = "Movement") bool Is_Running() const;
-	UFUNCTION() void On_Death();
+	UFUNCTION() virtual void On_Death();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Component") USpringArmComponent *Component_SpringArm;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Component") UCameraComponent *Component_Camera;

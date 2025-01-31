@@ -15,6 +15,8 @@ class DEMOSHOOTER_API ADSAICharacter : public ADSCharacter
 public:
 	ADSAICharacter(const FObjectInitializer &obj_init);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI") UBehaviorTree *Tree;
+	virtual void On_Death() override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI") UBehaviorTree *Tree = 0;
 };
 //-------------------------------------------------------------------------------------------------------------

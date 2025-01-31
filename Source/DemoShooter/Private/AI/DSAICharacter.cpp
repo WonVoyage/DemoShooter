@@ -1,6 +1,7 @@
 #include "AI/DSAICharacter.h"
 #include "AI/DSAIController.h"
 #include "Components/DSAIWeaponComponent.h"
+#include "BrainComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 //-------------------------------------------------------------------------------------------------------------
@@ -18,3 +19,14 @@ ADSAICharacter::ADSAICharacter(const FObjectInitializer &obj_init)
 	}
 }
 //-------------------------------------------------------------------------------------------------------------
+void ADSAICharacter::On_Death()
+{
+	Super::On_Death();
+
+	const auto ds_controller = Cast<AAIController>(Controller);
+
+	if (ds_controller && ds_controller->BrainComponent)
+	{
+		ds_controller->BrainComponent->Cleanup();
+	}
+}
